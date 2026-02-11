@@ -47,7 +47,14 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: >
+      sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   celery_worker:
     build:
@@ -62,6 +69,8 @@ services:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      backend:
         condition: service_healthy
     command: celery -A app.celery_app:celery_app worker --loglevel=info
 
@@ -80,7 +89,7 @@ services:
       - /app/.next
     depends_on:
       - backend
-    command: npm run dev
+    command: npm run dev -- -H 0.0.0.0
 
 volumes:
   postgres_data:
