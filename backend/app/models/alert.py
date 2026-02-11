@@ -26,7 +26,9 @@ class Alert(Base):
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     full_content: Mapped[str] = mapped_column(Text, nullable=True)
     category: Mapped[AlertCategory] = mapped_column(
-        Enum(AlertCategory), nullable=False, index=True
+        Enum(AlertCategory, values_callable=lambda e: [member.value for member in e]),
+        nullable=False,
+        index=True,
     )
     severity: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     country: Mapped[str] = mapped_column(String(100), nullable=False, index=True)

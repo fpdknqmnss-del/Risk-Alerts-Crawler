@@ -24,7 +24,10 @@ class Report(Base):
     content_json: Mapped[dict] = mapped_column(JSONB, nullable=True)
     pdf_path: Mapped[str] = mapped_column(String(500), nullable=True)
     status: Mapped[ReportStatus] = mapped_column(
-        Enum(ReportStatus), nullable=False, default=ReportStatus.DRAFT, index=True
+        Enum(ReportStatus, values_callable=lambda e: [member.value for member in e]),
+        nullable=False,
+        default=ReportStatus.DRAFT,
+        index=True,
     )
     created_by: Mapped[int] = mapped_column(
         ForeignKey("users.id"), nullable=False
