@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import io
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile, status
 from sqlalchemy import Select, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -163,17 +163,18 @@ async def update_mailing_list(
     )
 
 
-@router.delete("/lists/{mailing_list_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/lists/{mailing_list_id}", status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def delete_mailing_list(
     mailing_list_id: int,
     db: AsyncSession = Depends(get_db),
     _: User = Depends(require_roles(UserRole.ADMIN)),
-) -> None:
+) -> Response:
     await _ensure_tables(db)
     mailing_list = await db.scalar(select(MailingList).where(MailingList.id == mailing_list_id))
     if mailing_list is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Mailing list not found")
     await db.delete(mailing_list)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get("/lists/{mailing_list_id}/subscribers", response_model=list[SubscriberResponse])
@@ -238,13 +239,13 @@ async def create_subscriber(
     return subscriber
 
 
-@router.delete("/lists/{mailing_list_id}/subscribers/{subscriber_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/lists/{mailing_list_id}/subscribers/{subscriber_id}", status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def delete_subscriber(
     mailing_list_id: int,
     subscriber_id: int,
     db: AsyncSession = Depends(get_db),
     _: User = Depends(require_roles(UserRole.ADMIN)),
-) -> None:
+) -> Response:
     await _ensure_tables(db)
     subscriber = await db.scalar(
         select(Subscriber).where(
@@ -255,6 +256,7 @@ async def delete_subscriber(
     if subscriber is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subscriber not found")
     await db.delete(subscriber)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post(
