@@ -56,8 +56,10 @@ class WebSocketClient {
         }
       };
 
-      this.ws.onerror = (error) => {
-        console.error("[WS] Error:", error);
+      this.ws.onerror = () => {
+        // WebSocket errors are expected during reconnection cycles
+        // and when the backend is temporarily unavailable.
+        // The onclose handler triggers automatic reconnection.
       };
     } catch (error) {
       console.error("[WS] Failed to connect:", error);
