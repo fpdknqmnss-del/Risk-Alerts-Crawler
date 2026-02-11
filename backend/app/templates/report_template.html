@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #1f2937;
+      margin: 28px;
+      line-height: 1.5;
+      font-size: 12px;
+    }
+    h1, h2, h3 {
+      margin: 0 0 10px;
+      color: #111827;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    h2 {
+      margin-top: 24px;
+      font-size: 17px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 6px;
+    }
+    .meta {
+      margin-bottom: 16px;
+      color: #4b5563;
+      font-size: 11px;
+    }
+    .stats-grid {
+      display: flex;
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .stat {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 10px;
+      min-width: 140px;
+    }
+    .stat-title {
+      color: #6b7280;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+    }
+    ul {
+      margin: 6px 0 0 18px;
+      padding: 0;
+    }
+    li {
+      margin: 3px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f9fafb;
+      font-weight: 600;
+    }
+    .summary {
+      border-left: 3px solid #2563eb;
+      padding-left: 10px;
+      margin-top: 10px;
+    }
+    .muted {
+      color: #6b7280;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{title}}</h1>
+  <div class="meta">
+    Generated: {{created_at}}<br />
+    Scope: {{geographic_scope}}<br />
+    Date Range: {{date_range_start}} to {{date_range_end}}<br />
+    Status: {{status}}
+  </div>
+
+  <h2>Executive Summary</h2>
+  <div class="summary">{{summary}}</div>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-title">Total Alerts</div>
+      <div class="stat-value">{{alerts_total}}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">High Severity (4-5)</div>
+      <div class="stat-value">{{alerts_high_severity}}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Verified Alerts</div>
+      <div class="stat-value">{{alerts_verified}}</div>
+    </div>
+  </div>
+
+  <h2>Key Findings</h2>
+  <ul>{{key_findings}}</ul>
+
+  <h2>Recommendations</h2>
+  <ul>{{recommendations}}</ul>
+
+  <h2>Category Breakdown</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>{{category_breakdown_rows}}</tbody>
+  </table>
+
+  <h2>Country Breakdown</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>{{country_breakdown_rows}}</tbody>
+  </table>
+
+  <h2>Top Alerts</h2>
+  <p class="muted">Most severe and relevant alerts selected for this report.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Severity</th>
+        <th>Country</th>
+        <th>Verified</th>
+      </tr>
+    </thead>
+    <tbody>{{top_alert_rows}}</tbody>
+  </table>
+</body>
+</html>
